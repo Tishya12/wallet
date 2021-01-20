@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TransService {
@@ -20,6 +21,11 @@ public class TransService {
 
     public List<TransModel> displayall() {
         return transRepository.findAll();
+    }
+
+    public TransModel displayTransaction(int transactionid) {
+        Optional<TransModel> optionalUser = transRepository.findById(transactionid);
+        return optionalUser.orElse(null);
     }
 
 //    public List<WalletModel> findbyPhone(int phone) {return walletRepository.findByPhone(phone);}

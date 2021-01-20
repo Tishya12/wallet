@@ -18,5 +18,5 @@ public class WalletService {
     public List<WalletModel> getWallets() {
         return walletRepository.findAll();
     }
-    public List<WalletModel> findbyPhone(int phone) {return walletRepository.findByPhone(phone);}
+    public List<WalletModel> findbyPhone(Integer phone) {return walletRepository.findByPhone(phone);}
 }

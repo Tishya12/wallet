@@ -9,32 +9,32 @@ public class WalletModel {
 
     @Id
 
-    private int phone;
-    private int balance;
+    private Integer phone;
+    private Integer balance;
 
     public WalletModel() {
 //        super();
     }
 
-    public WalletModel(int phone, int balance) {
+    public WalletModel(Integer phone, Integer balance) {
 //        super();
         this.phone = phone;
         this.balance = balance;
     }
 
-    public int getPhone() {
+    public Integer getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(Integer phone) {
         this.phone = phone;
     }
 
-    public int getBalance() {
+    public Integer getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(Integer balance) {
         this.balance = balance;
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface WalletRepository extends JpaRepository<WalletModel,Integer> {
     List<WalletModel> findAll();
-    public List<WalletModel> findByPhone(int phone);
+    public List<WalletModel> findByPhone(Integer phone);
 }

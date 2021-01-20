@@ -15,50 +15,57 @@ import java.util.List;
 
 @RestController
 public class TransController {
-    @Autowired
+    @Autowired                         //dependency injection
     TransService transService;
-    @Autowired
+    @Autowired                         //dependency injection
     WalletService walletService;
 
+    //to display all transactions
     @GetMapping(value = "/transaction/all")
-    public List<TransModel> displayAll(){
+    public List<TransModel> displayAll() {
         return transService.displayall();
     }
 
 
-//    public TransModel displayTransaction(@PathVariable("transactionid") int transactionid,@RequestBody TransModel transModel){
-//        List<TransModel> trans_id = transService.findbyId(transModel.getTransactionid()); // check for same phone number
-//
-//        if (trans_id.isEmpty()) {
-//            return "transaction Id does'nt exists";
-//        }
-//        else walletService.addWallet(walletModel);
-//        return "Wallet created";
-@GetMapping(value = "/transaction/{transactionid}")
-        public String  displayTransaction(@PathVariable("transactionid") int transactionid) {
-//            return transService.displayTransaction(transactionid);
-    List<TransModel> checkTransaction = transService.findByTransactionid(transactionid);
-    if(checkTransaction.isEmpty())
-        return "Transaction Status: failed";
-    else return "Transaction Status: Successful";
-        }
+
+    //for checking status of transaction
+    @GetMapping(value = "/transaction/{transactionid}")
+    public String displayTransaction(@PathVariable("transactionid") int transactionid) {
+        List<TransModel> checkTransaction = transService.findByTransactionid(transactionid);
+        if (checkTransaction.isEmpty())
+            return "Transaction Status: failed";
+        else return "Transaction Status: Successful";
+    }
 
 
+    //for checking transaction of particular phone number
+//    @GetMapping(value = "/transaction/{payerphone}")
+//    public List<TransModel> displayTransactions(@PathVariable("payerphone") int phoneNo) {
+////            return transService.displayTransaction(transactionid);
+//        List<TransModel> payer_phone = transService.findbyPayerPhone(phoneNo);
+//        List<TransModel> payee_phone = transService.findbyPayeePhone(phoneNo);
+//        List<TransModel> newList = null;
+//        newList.addAll(payee_phone);
+//        newList.addAll(payer_phone);
+//        return payer_phone;
+//    }
+
+   //API to transfer money from one wallet to another wallet
     @PostMapping(value = "/transaction")           // post mapping
     public String addtransaction(@RequestBody TransModel transModel) {
 //        transService.addtransaction(transModel);
 //        return "transaction successful";
         List<WalletModel> payer_phone = walletService.findbyPhone(transModel.getPayerphone());
         List<WalletModel> payee_phone = walletService.findbyPhone(transModel.getPayeephone());
-        if(!payer_phone.isEmpty() && !payee_phone.isEmpty()) {
-            if(payee_phone.get(0).getBalance() >= transModel.getAmount()) {
-                transService.addtransaction(transModel);
-                payee_phone.get(0).changeBalance(-transModel.getAmount());
-                payer_phone.get(0).changeBalance(transModel.getAmount());
-                return "transaction successful";
-            }
-            else return "Insufficient balance";
-        }
-        else return "phone number doesn't exist";
+        if (!payee_phone.isEmpty()) {
+            if (!payer_phone.isEmpty()) {
+                if (payee_phone.get(0).getBalance() >= transModel.getAmount()) {
+                    transService.addtransaction(transModel);
+                    payee_phone.get(0).changeBalance(-transModel.getAmount());
+                    payer_phone.get(0).changeBalance(transModel.getAmount());
+                    return "transaction successful";
+                } else return "Insufficient balance";
+            } else return "phone number doesn't exist";
+        } else return "phone number doesn't exist";
     }
 }

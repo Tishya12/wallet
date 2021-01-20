@@ -6,7 +6,7 @@ import javax.persistence.Id;
 
 @Entity
 public class TransModel {
-    @Id
+    @Id                                   //primary key
     @GeneratedValue
     private Integer transactionid;
     private Integer payerphone;

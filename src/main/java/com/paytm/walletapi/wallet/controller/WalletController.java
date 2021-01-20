@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -18,8 +17,8 @@ public class WalletController {
     @Autowired
     private WalletService walletService;
 
-
-    @PostMapping(value = "/wallet")           // post mapping
+    //will create wallet for a user
+    @PostMapping(value = "/wallet")
     public String addWallet(@RequestBody WalletModel walletModel) {
         List<WalletModel> phone_number = walletService.findbyPhone(walletModel.getPhone()); // check for same phone number
 
@@ -29,8 +28,10 @@ public class WalletController {
         return "Wallet created";
 
     }
+
+    //for displaying all the wallets present in the database
     @GetMapping(value = "/wallet/all")
-    public List<WalletModel> displayAll(){
+    public List<WalletModel> displayAll() {
         return walletService.getWallets();
     }
 }

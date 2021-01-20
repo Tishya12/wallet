@@ -8,16 +8,13 @@ import javax.persistence.Id;
 public class WalletModel {
 
     @Id
-
     private Integer phone;
     private Integer balance;
 
     public WalletModel() {
-//        super();
     }
 
     public WalletModel(Integer phone, Integer balance) {
-//        super();
         this.phone = phone;
         this.balance = balance;
     }

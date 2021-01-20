@@ -13,10 +13,11 @@ public class WalletModel {
     private int balance;
 
     public WalletModel() {
-        super();
+//        super();
     }
 
     public WalletModel(int phone, int balance) {
+//        super();
         this.phone = phone;
         this.balance = balance;
     }

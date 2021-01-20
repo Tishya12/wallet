@@ -1,9 +1,13 @@
 package com.paytm.walletapi.transaction.Repository;
 
 import com.paytm.walletapi.transaction.Model.TransModel;
+import com.paytm.walletapi.wallet.model.WalletModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TransRepository extends JpaRepository<TransModel,Integer> {
+    public List<TransModel> findByTransactionid(Integer transactionid);
 }

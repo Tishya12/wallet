@@ -28,6 +28,10 @@ public class TransService {
         return optionalUser.orElse(null);
     }
 
+    public List<TransModel> findByTransactionid(int transactionid) {
+        return transRepository.findByTransactionid(transactionid);
+    }
+
 //    public List<WalletModel> findbyPhone(int phone) {return walletRepository.findByPhone(phone);}
 }
 

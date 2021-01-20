@@ -37,4 +37,8 @@ public class WalletModel {
     public void setBalance(Integer balance) {
         this.balance = balance;
     }
+
+    public void changeBalance(Integer amount) {
+        this.balance += amount;
+    }
 }

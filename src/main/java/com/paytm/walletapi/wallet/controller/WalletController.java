@@ -21,7 +21,7 @@ public class WalletController {
 
     @PostMapping(value = "/wallet")           // post mapping
     public String addWallet(@RequestBody WalletModel walletModel) {
-        List<WalletModel> phone_number = walletService.findByPhone(walletModel.getPhone()); // check for same phone number
+        List<WalletModel> phone_number = walletService.findbyPhone(walletModel.getPhone()); // check for same phone number
 
         if (!phone_number.isEmpty()) {
             return "Wallet already exists";

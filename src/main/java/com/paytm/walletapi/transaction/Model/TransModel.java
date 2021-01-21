@@ -56,4 +56,7 @@ public class TransModel {
     public void setAmount(Integer amount) {
         this.amount = amount;
     }
+
+//    public Object getTransaction() {
+//    }
 }

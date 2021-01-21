@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -52,16 +53,17 @@ public class TransController {
 
 
     //for checking transaction of particular phone number
-//    @GetMapping(value = "/transaction/{payerphone}")
-//    public List<TransModel> displayTransactions(@PathVariable("payerphone") int phoneNo) {
-////            return transService.displayTransaction(transactionid);
-//        List<TransModel> payer_phone = transService.findbyPayerPhone(phoneNo);
-//        List<TransModel> payee_phone = transService.findbyPayeePhone(phoneNo);
-//        List<TransModel> newList = null;
-//        newList.addAll(payee_phone);
-//        newList.addAll(payer_phone);
-//        return payer_phone;
-//    }
+    @GetMapping(value = "/transaction/phone/{payerphone}")
+    public List<TransModel> displayTransactions(@PathVariable("payerphone") Integer phoneNo) {
+//            return transService.displayTransaction(transactionid);
+        List<TransModel> payer_phone = transService.findbyPayerPhone(phoneNo);
+        List<TransModel> payee_phone = transService.findbyPayeePhone(phoneNo);
+        List<TransModel> newList = new ArrayList<TransModel>();
+        newList.addAll(payee_phone);
+        newList.addAll(payer_phone);
+
+        return newList;
+    }
 
     //API to transfer money from one wallet to another wallet
     @PostMapping(value = "/transaction")           // post mapping

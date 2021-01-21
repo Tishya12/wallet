@@ -5,10 +5,14 @@ import com.paytm.walletapi.transaction.Service.TransService;
 import com.paytm.walletapi.wallet.model.WalletModel;
 import com.paytm.walletapi.wallet.service.WalletService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -21,11 +25,10 @@ public class TransController {
     WalletService walletService;
 
     //to display all transactions
-    @GetMapping(value = "/transaction/all")
-    public List<TransModel> displayAll() {
-        return transService.displayall();
-    }
-
+//    @GetMapping(value = "/transaction/all")
+//    public List<TransModel> displayAll() {
+//        return transService.displayall();
+//    }
 
 
     //for checking status of transaction
@@ -35,6 +38,16 @@ public class TransController {
         if (checkTransaction.isEmpty())
             return "Transaction Status: failed";
         else return "Transaction Status: Successful";
+    }
+
+    //to display transaction using pagination
+    @GetMapping(value = "/transaction/all")
+    public ResponseEntity<List<TransModel>> getAllTransactions(
+            @RequestParam(defaultValue = "0") Integer pageNo,
+            @RequestParam(defaultValue = "1") Integer pageSize) {
+        List<TransModel> list = transService.getAllTransactions(pageNo, pageSize);
+
+        return new ResponseEntity<List<TransModel>>(list, new HttpHeaders(), HttpStatus.OK);
     }
 
 
@@ -50,7 +63,7 @@ public class TransController {
 //        return payer_phone;
 //    }
 
-   //API to transfer money from one wallet to another wallet
+    //API to transfer money from one wallet to another wallet
     @PostMapping(value = "/transaction")           // post mapping
     public String addtransaction(@RequestBody TransModel transModel) {
 //        transService.addtransaction(transModel);

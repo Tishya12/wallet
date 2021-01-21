@@ -11,7 +11,7 @@ import java.util.List;
 //repository
 
 @Repository
-public interface TransRepository extends JpaRepository<TransModel,Integer>  {
+public interface TransRepository extends JpaRepository<TransModel,Integer> ,PagingAndSortingRepository<TransModel,Integer> {
     public List<TransModel> findByTransactionid(Integer transactionid);
     public List<TransModel> findByPayeephone(Integer payeephone);
     public List<TransModel> findByPayerphone(Integer payerphone);

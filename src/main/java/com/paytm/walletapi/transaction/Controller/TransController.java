@@ -30,7 +30,7 @@ public class TransController {
 
     //for checking status of transaction
     @GetMapping(value = "/transaction/{transactionid}")
-    public String displayTransaction(@PathVariable("transactionid") int transactionid) {
+    public String displayTransaction(@PathVariable("transactionid") Integer transactionid) {
         List<TransModel> checkTransaction = transService.findByTransactionid(transactionid);
         if (checkTransaction.isEmpty())
             return "Transaction Status: failed";

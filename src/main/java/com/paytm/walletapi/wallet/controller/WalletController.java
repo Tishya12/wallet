@@ -32,6 +32,7 @@ public class WalletController {
     //for displaying all the wallets present in the database
     @GetMapping(value = "/wallet/all")
     public List<WalletModel> displayAll() {
+        System.out.println("sever 1");
         return walletService.getWallets();
     }
 }

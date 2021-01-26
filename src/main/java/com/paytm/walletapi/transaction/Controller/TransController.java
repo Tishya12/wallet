@@ -1,6 +1,8 @@
 package com.paytm.walletapi.transaction.Controller;
 
+import com.paytm.walletapi.transaction.Model.ElasticTransaction;
 import com.paytm.walletapi.transaction.Model.TransModel;
+import com.paytm.walletapi.transaction.Repository.elasticrepo;
 import com.paytm.walletapi.transaction.Service.TransService;
 import com.paytm.walletapi.wallet.model.WalletModel;
 import com.paytm.walletapi.wallet.service.WalletService;
@@ -8,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +27,12 @@ public class TransController {
     TransService transService;
     @Autowired                         //dependency injection
     WalletService walletService;
+    @Autowired
+    private elasticrepo elasticRepository;
 
+    @Autowired
+    private KafkaTemplate kafkaTemplate;
+    String kafkaTopic = "txn_by_id";
     //to display all transactions
 //    @GetMapping(value = "/transaction/all")
 //    public List<TransModel> displayAll() {
@@ -83,4 +91,50 @@ public class TransController {
             } else return "phone number doesn't exist";
         } else return "phone number doesn't exist";
     }
+
+    @PostMapping("/elastictransaction")
+    public String createTxn(@RequestBody ElasticTransaction transaction) {
+        List<WalletModel> payer_num=walletService.findbyPhone(transaction.getSenderphone());
+        List<WalletModel> payee_num=walletService.findbyPhone(transaction.getReceiverphone());
+
+        int payer_balance=payer_num.get(0).getBalance();
+        int txnAmount=transaction.getAmount();
+
+        if(!payer_num.isEmpty())
+        {
+            if(!payee_num.isEmpty())
+            {
+                if(payer_balance>=txnAmount)
+                {
+//                  transService.addtransaction(transaction);
+                    kafkaTemplate.send(kafkaTopic, transaction);
+
+
+                    WalletModel payer=payer_num.get(0);
+                    WalletModel payee=payee_num.get(0);
+
+                    payer.changeBalance(-txnAmount);
+                    payee.changeBalance(txnAmount);
+
+
+
+                    return "Successfully sent";
+                }
+                else return "Insufficient balance";
+            } else return "payee doesn't exist";
+        } else return "payer doesn't exist";
+
+    }
+
+    @GetMapping("/elastictransaction/{phone}")
+    public List<ElasticTransaction> getTransactions(@PathVariable Integer phone){
+        List<ElasticTransaction> sender=elasticRepository.findBySenderphone(phone);
+        List<ElasticTransaction> reciever=elasticRepository.findByReceiverphone(phone);
+
+        List<ElasticTransaction> newlist= new ArrayList<ElasticTransaction>();
+        newlist.addAll(sender);
+        newlist.addAll(reciever);
+        return newlist;
+    }
+
 }
